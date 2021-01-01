@@ -111,7 +111,7 @@ clientSocket.send(msgfileType)
 clientSocket.send(msgfileId)
 clientSocket.send(msgfilename)
 clientSocket.send(b'Content-Transfer-Encoding:base64\r\n\r\n')
-img = open("./brawler.jpg", 'rb')
+img = open("./test.png", 'rb')
 while True:
     filedata = img.read(1024)
     if not filedata:

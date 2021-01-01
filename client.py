@@ -1,21 +1,21 @@
 from socket import *
 import base64
 import ssl
-subject = "I love computer networks!"
+subject = "Subject: Oh my god!\r\n"
 contenttype = "text/plain"
 msg = "\r\n I love computer networks!"
 endmsg = "\r\n.\r\n"
-mailer = 'X-Mailer:cbx\r\n'
+version = "MIME-Version: 1.0\r\n"
 msgtype = "Content-Type:multipart/mixed;boundary='BOUNDARY'\r\n\r\n"
 msgboudary = b"--BOUNDARY\r\n"
 # Choose a mail server (e.g. Google mail server)
 # and call it mailserver
 mailserver = ('smtp.qq.com', 465)
-imgname = 'myimg.jpg'
+imgname = 'img.jpg'
 msgfileType = b"Content-type:image/gif;\r\n"
-msgfilename = b"Content-Disposition: attachment; filename= '%s'\r\n"%imgname.encode()
+msgfilename = b"Content-Disposition: inline; filename= '%s'\r\n"%imgname.encode()
 msgfileId = b'Content-ID:<imgid1>\r\n'
-img = open("./brawler.jpg", 'rb')
+
 # Sender and reciever
 # Fill in start
 receiver_email = 'wangyicbx@163.com'
@@ -38,11 +38,11 @@ clientSocket.connect(mailserver)
 
 recv = clientSocket.recv(1024).decode()
 print(recv)
-if recv[:3] !=  '220':
+if recv[:3] != '220':
     print('220 reply not received from server.')
 
 # Send HELO command and print server response.
-heloCommand = 'HELO Alice\r\n'
+heloCommand = 'HELO QQ\r\n'
 clientSocket.send(heloCommand.encode())
 recv1 = clientSocket.recv(1024).decode()
 print(recv1)
@@ -96,9 +96,8 @@ print('7: '+recv7)
 # Send message data.
 # Fill in start
 clientSocket.send(subject.encode())
-clientSocket.send(mailer.encode())
+clientSocket.send(version.encode())
 clientSocket.send(msgtype.encode())
-clientSocket.send(b'Content-Transfer-Encoding:7bit\r\n\r\n')
 
 # 邮件内容
 clientSocket.send(b'\r\n\r\n'+msgboudary)
@@ -112,6 +111,7 @@ clientSocket.send(msgfileType)
 clientSocket.send(msgfileId)
 clientSocket.send(msgfilename)
 clientSocket.send(b'Content-Transfer-Encoding:base64\r\n\r\n')
+img = open("./brawler.jpg", 'rb')
 while True:
     filedata = img.read(1024)
     if not filedata:
